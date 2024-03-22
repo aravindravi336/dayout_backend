@@ -11,13 +11,20 @@ router.post("/signin", async (req, res) => {
     // Check if the user exists
     const user = await userModel.findOne({ username });
     if (!user) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return(res.json({
+        status:"fail",
+        message:"invalid user"
+      }))
     }
 
     // Check if the password is correct
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      
+      return(res.json({
+        status:"fail",
+        message:"password not match"
+      }))
     }
 
     // If both username and password are correct, return success message
