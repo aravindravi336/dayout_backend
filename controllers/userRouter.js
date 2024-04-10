@@ -39,20 +39,20 @@ router.post("/signin", async (req, res) => {
 
 // POST /api/signup
 router.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
-    // Check if the username is already taken
-    const existingUser = await userModel.findOne({ username });
+    // Check if the username or email is already taken
+    const existingUser = await userModel.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+      return res.status(400).json({ message: "Username or email already exists" });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = new userModel({ username, password: hashedPassword });
+    const newUser = new userModel({ username, email, password: hashedPassword });
     await newUser.save();
 
     return res.status(201).json({ message: "User created successfully" });
@@ -61,6 +61,7 @@ router.post("/signup", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 
 module.exports=router
