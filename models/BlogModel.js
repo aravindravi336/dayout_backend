@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  email: {
+const blogSchema = new mongoose.Schema({
+  name: {
     type: String,
     required: true,
   },
@@ -10,16 +10,14 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    type: String,
-    data: Buffer
-    
+    type: String, // Assuming you're storing the image path
   },
   rating: {
-    type: String,
+    type: Number, // Assuming rating is numeric
     required: true,
   }
 });
 
-const blog_var = mongoose.model("blog", userSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
-module.exports = blog;
+module.exports = Blog;
