@@ -27,6 +27,18 @@ router.post("/signin", async (req, res) => {
       }))
     }
 
+
+
+    if (username === "admin" && passwordMatch) {
+      // Redirect the admin to the admin dashboard (You need to define the admin dashboard route)
+      return res.json({
+        status: "success",
+        message: "Admin login successful",
+        isAdmin: true
+      });
+    }
+
+
     // If both username and password are correct, return success message
     return res.status(200).json({ message: "Login successful" });
   } catch (error) {
@@ -61,6 +73,21 @@ router.post("/signup", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+
+// GET /api/users
+router.get("/users", async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await userModel.find({}, { password: 0 }); // Exclude password field from the response
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 
 

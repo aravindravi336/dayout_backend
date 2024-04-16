@@ -7,6 +7,7 @@ const packageRouter=require("./controllers/packageRouter")
 const adminRouter=require("./controllers/admin_packageRouter")
 const studentRouter = require("./controllers/studentRouter")
 const blogRouter = require("./controllers/blogRouter")
+const admin_studentRouter = require("./controllers/admin_studentRouter")
 
 const app = express()
 
@@ -22,5 +23,6 @@ app.use("/Package",packageRouter)
 app.use("/AdminPackage",adminRouter)
 app.use("/Student",studentRouter)
 app.use("/blog",blogRouter)
+app.use("/AdminStudent",admin_studentRouter)
 
 app.listen(5000, () => { console.log("server started") })
