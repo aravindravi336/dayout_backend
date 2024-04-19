@@ -14,14 +14,14 @@ router.post("/add", async (req, res) => {
 });
 
 // Get all package bookings
-// router.get("/", async (req, res) => {
-//   try {
-//     const packages = await Package.find();
-//     res.json(packages);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+router.get("/viewallpackage", async (req, res) => {
+  try {
+    const packages = await Package.find();
+    res.json(packages);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // // Get a single package booking
 // router.get("/:id", getPackage, (req, res) => {

@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ticketType: { // New field for ticket type
+    type: String,
+    required: true, // Not required initially, but may be filled based on the tickets option
+  },
   phone: {
     type: Number,
     required: true,
