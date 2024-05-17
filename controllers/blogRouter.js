@@ -43,4 +43,19 @@ router.post("/add", upload.single("image"), async (req, res) => {
   }
 });
 
+
+// Assuming you have a route for fetching feedback
+// Add this route to your backend
+
+router.get("/feedback", async (req, res) => {
+  try {
+    // Fetch all feedback from the database
+    const feedback = await Blog.find();
+    res.status(200).json(feedback);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
 module.exports = router;

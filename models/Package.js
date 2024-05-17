@@ -16,9 +16,14 @@ const userSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
+    
   },
   package_type: {
     type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
     required: true,
   }
 });
