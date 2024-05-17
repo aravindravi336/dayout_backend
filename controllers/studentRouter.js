@@ -73,14 +73,24 @@ router.patch("/edit/:id", getPackage, async (req, res) => {
 });
 
 // Delete a package booking
-router.delete("/delete/:id", getPackage, async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
-    await res.package.remove();
-    res.json({ message: "Package booking deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    let id=req.params.id
+    let data=await StudentPackage.findByIdAndDelete(id)
+    if(!data){
+      return res.json({
+        status:"error",
+        message:'Package not found'
+      })
+    }
+    return res.json({
+      status:'success',
+      message:'successfully deleted package'
+    })
+  } catch (error) {
+    
   }
-});
+})
 
 async function getPackage(req, res, next) {
   try {

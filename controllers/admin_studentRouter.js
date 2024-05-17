@@ -54,7 +54,7 @@ router.get("/search/:minPrice/:maxPrice", async (req, res) => {
 // Delete student package by ID
 router.delete("/delete/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
     const deletedPackage = await Admin_Student.findByIdAndDelete(id);
     if (!deletedPackage) {
       return res.status(404).json({ message: "Package not found" });
