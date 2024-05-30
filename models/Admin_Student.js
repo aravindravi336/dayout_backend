@@ -22,6 +22,6 @@ const userSchema = new mongoose.Schema({
 }
 });
 
-const Admin_Package = mongoose.model("admin_packages", userSchema);
+const Admin_Student = mongoose.model("admin_student", userSchema);
 
-module.exports = Admin_Package;
+module.exports = Admin_Student;

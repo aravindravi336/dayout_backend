@@ -13,10 +13,26 @@ router.post("/addstudentpackage", async (req, res) => {
   }
 });
 
-// Get all package bookings
-router.get("/", async (req, res) => {
+
+// Add a route to check if a package is already booked
+router.post("/checkbooking", async (req, res) => {
   try {
-    const packages = await Package.find();
+    const { institution, date } = req.body;
+    const existingBooking = await StudentPackage.findOne({ institution, date });
+    if (existingBooking) {
+      res.status(400).json({ message: 'Package already booked for this institution and date' });
+    } else {
+      res.status(200).json({ message: 'Package available for booking' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Get all package bookings
+router.get("/viewbookings", async (req, res) => {
+  try {
+    const packages = await StudentPackage.find();
     res.json(packages);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -24,24 +40,30 @@ router.get("/", async (req, res) => {
 });
 
 // Get a single package booking
-router.get("/:id", getPackage, (req, res) => {
+router.get("/getone/:id", getPackage, (req, res) => {
   res.json(res.package);
 });
 
 // Update a package booking
-router.patch("/:id", getPackage, async (req, res) => {
+router.patch("/edit/:id", getPackage, async (req, res) => {
   try {
-    if (req.body.name != null) {
-      res.package.name = req.body.name;
+    if (req.body.institution != null) {
+      res.package.institution = req.body.institution;
     }
-    if (req.body.email != null) {
-      res.package.email = req.body.email;
+    if (req.body.inst_email != null) {
+      res.package.inst_email = req.body.inst_email;
     }
-    if (req.body.no_of_people != null) {
-      res.package.no_of_people = req.body.no_of_people;
+    if (req.body.no_of_students != null) {
+      res.package.no_of_students = req.body.no_of_students;
     }
     if (req.body.date != null) {
       res.package.date = req.body.date;
+    }
+    if (req.body.tickets != null) {
+      res.package.tickets = req.body.tickets;
+    }
+    if (req.body.ticketType != null) { // Update ticketType if provided
+      res.package.ticketType = req.body.ticketType;
     }
     const updatedPackage = await res.package.save();
     res.json(updatedPackage);
@@ -51,30 +73,36 @@ router.patch("/:id", getPackage, async (req, res) => {
 });
 
 // Delete a package booking
-router.delete("/:id", getPackage, async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
-    await res.package.remove();
-    res.json({ message: "Package booking deleted" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    let id=req.params.id
+    let data=await StudentPackage.findByIdAndDelete(id)
+    if(!data){
+      return res.json({
+        status:"error",
+        message:'Package not found'
+      })
+    }
+    return res.json({
+      status:'success',
+      message:'successfully deleted package'
+    })
+  } catch (error) {
+    
   }
-});
+})
 
 async function getPackage(req, res, next) {
-  let package;
   try {
-    package = await Package.findById(req.params.id);
+    const package = await StudentPackage.findById(req.params.id);
     if (package == null) {
       return res.status(404).json({ message: "Package booking not found" });
     }
+    res.package = package; // Attach the found package to res.package
+    next(); // Call next to proceed with the request
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
-
-  res.package = package;
-  next();
 }
 
 module.exports = router;
-
-
